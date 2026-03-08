@@ -10,9 +10,161 @@ generator client {
 }
 
 datasource db {
-provider = "mysql"
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
 
+// ===== Enums based on your SQL enums =====
 
+enum Role {
+  user
+  admin
+}
 
-url      = env("DATABASE_URL")
+enum Gender {
+  male
+  female
+  other
+}
+
+enum HealthGoal {
+  lose_weight
+  gain_weight
+  maintain
+}
+
+enum MealType {
+  breakfast
+  lunch
+  dinner
+  snack
+}
+
+enum FoodType {
+  fruit
+  vegetable
+  meat
+  dairy
+  grain
+  snack
+  drink
+}
+
+// ===== 1. USER (base table) =====
+
+model User {
+  userId    Int      @id @default(autoincrement())
+  userName  String   @unique @db.VarChar(50)
+  email     String   @unique @db.VarChar(100)
+  password  String   @db.VarChar(255)
+  role      Role     @default(user)
+  createdAt DateTime @default(now())
+
+  userInfo   UserInfo?
+  mealPlans  MealPlan[]
+  mealLogs   MealLog[]
+  progresses Progress[]
+  feedbacks  Feedback[]
+}
+
+// ===== 2. USERINFO (one-to-one with User) =====
+
+model UserInfo {
+  userInfoId Int       @id @default(autoincrement())
+  userId     Int       @unique
+  fullName   String    @db.VarChar(100)
+  weight     Float?
+  height     Float?
+  age        Int?
+  gender     Gender?
+  healthGoal HealthGoal
+  createdAt  DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+}
+
+// ===== 3. FOODITEM (standalone, referenced) =====
+
+model FoodItem {
+  foodId       Int      @id @default(autoincrement())
+  foodName     String   @db.VarChar(100)
+  foodCalories Float
+  foodProtein  Float?   @default(0)
+  carbs        Float?   @default(0)
+  fat          Float?   @default(0)
+  foodType     FoodType?
+  createdAt    DateTime @default(now())
+
+  mealPlans MealPlan[]
+  mealLogs  MealLog[]
+}
+
+// ===== 4. MEALPLAN (many-to-one User, many-to-one FoodItem) =====
+
+model MealPlan {
+  mealPlanId  Int       @id @default(autoincrement())
+  userId      Int
+  foodId      Int?
+  planDate    DateTime  @db.Date
+  mealType    MealType
+  calorieGoal Int
+  breakfast   String?   @db.VarChar(255)
+  lunch       String?   @db.VarChar(255)
+  dinner      String?   @db.VarChar(255)
+  snack       String?   @db.VarChar(255)
+  startTime   DateTime?
+  endTime     DateTime?
+
+  user User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  food FoodItem? @relation(fields: [foodId], references: [foodId], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([foodId])
+}
+
+// ===== 5. MEALLOG (many-to-one User, many-to-one FoodItem) =====
+
+model MealLog {
+  mealLogId        Int       @id @default(autoincrement())
+  userId           Int
+  foodId           Int?
+  logDate          DateTime  @db.Date
+  mealType         MealType
+  caloriesConsumed Int       @default(0)
+  createdAt        DateTime  @default(now())
+
+  user User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  food FoodItem? @relation(fields: [foodId], references: [foodId], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([foodId])
+}
+
+// ===== 6. PROGRESS (many-to-one User) =====
+
+model Progress {
+  progressId Int       @id @default(autoincrement())
+  userId     Int
+  weight     Float?
+  BMI        Float?
+  date       DateTime  @db.Date
+  createdAt  DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ===== 7. FEEDBACK (many-to-one User) =====
+
+model Feedback {
+  feedbackId  Int       @id @default(autoincrement())
+  userId      Int
+  rating      Int       @db.TinyInt
+  comment     String?   @db.VarChar(255)
+  submittedAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@index([userId])
 }
