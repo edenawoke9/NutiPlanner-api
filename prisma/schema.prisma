@@ -70,15 +70,19 @@ model User {
 // ===== 2. USERINFO (one-to-one with User) =====
 
 model UserInfo {
-  userInfoId Int       @id @default(autoincrement())
-  userId     Int       @unique
-  fullName   String    @db.VarChar(100)
-  weight     Float?
-  height     Float?
-  age        Int?
-  gender     Gender?
-  healthGoal HealthGoal
-  createdAt  DateTime  @default(now())
+  userInfoId         Int       @id @default(autoincrement())
+  userId             Int       @unique
+  fullName           String    @db.VarChar(100)
+  weight             Float?
+  height             Float?
+  age                Int?
+  gender             Gender?
+  healthGoal         HealthGoal
+  activityLevel      Float?    @default(1.2)
+  allergies          String?   @db.VarChar(255)
+  dislikes           String?   @db.VarChar(255)
+  dietaryPreferences String?   @db.VarChar(255)
+  createdAt          DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
@@ -95,48 +99,85 @@ model FoodItem {
   foodType     FoodType?
   createdAt    DateTime @default(now())
 
-  mealPlans MealPlan[]
-  mealLogs  MealLog[]
+  mealPlanItems MealPlanItem[]
+  mealLogItems  MealLogItem[]
 }
 
 // ===== 4. MEALPLAN (many-to-one User, many-to-one FoodItem) =====
 
 model MealPlan {
-  mealPlanId  Int       @id @default(autoincrement())
-  userId      Int
-  foodId      Int?
-  planDate    DateTime  @db.Date
-  mealType    MealType
-  calorieGoal Int
-  breakfast   String?   @db.VarChar(255)
-  lunch       String?   @db.VarChar(255)
-  dinner      String?   @db.VarChar(255)
-  snack       String?   @db.VarChar(255)
-  startTime   DateTime?
-  endTime     DateTime?
+  mealPlanId   Int       @id @default(autoincrement())
+  userId       Int
+  planDate     DateTime  @db.Date
+  calorieGoal  Int
+  proteinGoal  Float?    @default(0)
+  carbsGoal    Float?    @default(0)
+  fatGoal      Float?    @default(0)
+  startTime    DateTime?
+  endTime      DateTime?
+  generatedBy  String?   @db.VarChar(30)
+  notes        String?   @db.VarChar(255)
+  createdAt    DateTime  @default(now())
 
-  user User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  food FoodItem? @relation(fields: [foodId], references: [foodId], onDelete: SetNull)
+  user  User           @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  items MealPlanItem[]
 
   @@index([userId])
+}
+
+model MealPlanItem {
+  mealPlanItemId Int      @id @default(autoincrement())
+  mealPlanId     Int
+  mealType       MealType
+  foodId         Int
+  quantity       Float    @default(1)
+  calories       Float    @default(0)
+  protein        Float    @default(0)
+  carbs          Float    @default(0)
+  fat            Float    @default(0)
+  notes          String?  @db.VarChar(255)
+
+  mealPlan MealPlan @relation(fields: [mealPlanId], references: [mealPlanId], onDelete: Cascade)
+  food     FoodItem @relation(fields: [foodId], references: [foodId], onDelete: Restrict)
+
+  @@index([mealPlanId])
   @@index([foodId])
 }
 
 // ===== 5. MEALLOG (many-to-one User, many-to-one FoodItem) =====
 
 model MealLog {
-  mealLogId        Int       @id @default(autoincrement())
-  userId           Int
-  foodId           Int?
-  logDate          DateTime  @db.Date
-  mealType         MealType
-  caloriesConsumed Int       @default(0)
-  createdAt        DateTime  @default(now())
+  mealLogId         Int      @id @default(autoincrement())
+  userId            Int
+  logDate           DateTime @db.Date
+  mealType          MealType
+  caloriesConsumed  Float    @default(0)
+  proteinConsumed   Float    @default(0)
+  carbsConsumed     Float    @default(0)
+  fatConsumed       Float    @default(0)
+  notes             String?  @db.VarChar(255)
+  createdAt         DateTime @default(now())
 
-  user User      @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  food FoodItem? @relation(fields: [foodId], references: [foodId], onDelete: SetNull)
+  user  User          @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  items MealLogItem[]
 
   @@index([userId])
+}
+
+model MealLogItem {
+  mealLogItemId Int     @id @default(autoincrement())
+  mealLogId     Int
+  foodId        Int
+  quantity      Float   @default(1)
+  calories      Float   @default(0)
+  protein       Float   @default(0)
+  carbs         Float   @default(0)
+  fat           Float   @default(0)
+
+  mealLog MealLog  @relation(fields: [mealLogId], references: [mealLogId], onDelete: Cascade)
+  food    FoodItem @relation(fields: [foodId], references: [foodId], onDelete: Restrict)
+
+  @@index([mealLogId])
   @@index([foodId])
 }
 

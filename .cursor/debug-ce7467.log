@@ -1,0 +1,2 @@
+{"sessionId":"ce7467","runId":"run1","hypothesisId":"H1","location":"src/server.js:36","message":"Server module initialized","data":{"pid":75100,"nodeEnv":null},"timestamp":1778237619826}
+{"sessionId":"ce7467","runId":"run1","hypothesisId":"H5","location":"src/server.js:121","message":"listen callback fired","data":{"port":4001,"isFallback":false},"timestamp":1778237619891}

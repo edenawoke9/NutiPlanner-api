@@ -5,12 +5,12 @@
   "license": "ISC",
   "author": "",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
-    "start": "node server.js"
+    "start": "node src/server.js"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
