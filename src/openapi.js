@@ -5,7 +5,7 @@ const openapi = {
     version: "1.0.0",
     description: "Backend API documentation for Smart Nutrition Planner.",
   },
-  servers: [{ url: "http://localhost:4001" }],
+  servers: [{ url: "https://nutiplanner-api-2.onrender.com" }],
   tags: [
     { name: "Health" },
     { name: "User" },
