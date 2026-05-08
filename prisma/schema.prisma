@@ -10,7 +10,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -201,7 +201,7 @@ model Progress {
 model Feedback {
   feedbackId  Int       @id @default(autoincrement())
   userId      Int
-  rating      Int       @db.TinyInt
+  rating      Int       @db.SmallInt
   comment     String?   @db.VarChar(255)
   submittedAt DateTime  @default(now())
 
