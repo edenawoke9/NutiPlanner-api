@@ -47,7 +47,7 @@ async function getFoodItemById(req, res) {
 }
 
 async function createFoodItem(req, res) {
-  const { foodName, foodCalories, foodProtein, carbs, fat, foodType } = req.body;
+  const { foodName, foodCalories, foodProtein, carbs, fat, category, foodType } = req.body;
 
   if (!foodName || foodCalories === undefined) {
     return res.status(400).json({ message: "foodName and foodCalories are required" });
@@ -61,6 +61,7 @@ async function createFoodItem(req, res) {
         foodProtein: foodProtein !== undefined ? Number(foodProtein) : 0,
         carbs: carbs !== undefined ? Number(carbs) : 0,
         fat: fat !== undefined ? Number(fat) : 0,
+        ...(category !== undefined && { category }),
         foodType,
       },
     });
@@ -78,7 +79,7 @@ async function updateFoodItem(req, res) {
     return res.status(400).json({ message: "Invalid food id" });
   }
 
-  const { foodName, foodCalories, foodProtein, carbs, fat, foodType } = req.body;
+  const { foodName, foodCalories, foodProtein, carbs, fat, category, foodType } = req.body;
 
   try {
     const existing = await prisma.foodItem.findUnique({
@@ -97,6 +98,7 @@ async function updateFoodItem(req, res) {
         ...(foodProtein !== undefined && { foodProtein: Number(foodProtein) }),
         ...(carbs !== undefined && { carbs: Number(carbs) }),
         ...(fat !== undefined && { fat: Number(fat) }),
+        ...(category !== undefined && { category }),
         ...(foodType !== undefined && { foodType }),
       },
     });
