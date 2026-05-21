@@ -17,6 +17,12 @@ function sanitizeUser(user) {
   return safeUser;
 }
 
+function createAuthToken(user) {
+  return jwt.sign({ userId: user.userId, role: user.role }, SECRET_KEY, {
+    expiresIn: "7d",
+  });
+}
+
 async function getUserById(req, res) {
   const userId = parseUserId(req.params.userId);
   if (!userId) return res.status(400).json({ message: "Invalid userId" });
@@ -49,7 +55,13 @@ async function createUser(req, res) {
         ...(role ? { role } : {}),
       },
     });
-    return res.status(201).json(sanitizeUser(user));
+    const token = createAuthToken(user);
+
+    return res.status(201).json({
+      message: "Registration successful",
+      token,
+      user: sanitizeUser(user),
+    });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error", error });
   }
@@ -68,9 +80,7 @@ async function loginUser(req, res) {
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) return res.status(401).json({ message: "Invalid password" });
 
-    const token = jwt.sign({ userId: user.userId, role: user.role }, SECRET_KEY, {
-      expiresIn: "7d",
-    });
+    const token = createAuthToken(user);
 
     return res.status(200).json({
       message: "Login successful",
