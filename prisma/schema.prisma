@@ -96,6 +96,7 @@ model FoodItem {
   foodProtein  Float?   @default(0)
   carbs        Float?   @default(0)
   fat          Float?   @default(0)
+  category     String?  @db.VarChar(50)
   foodType     FoodType?
   createdAt    DateTime @default(now())
 

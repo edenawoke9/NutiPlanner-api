@@ -1,0 +1,301 @@
+Food,Category,Calories_kcal,Protein_g,Fat_g,Carbs_g,Fiber_g
+Kitcha,Bread,612,28.2,11.5,65.1,7.1
+Chicken Tibs,Chicken Dish,251,21.4,30.7,19.3,7.5
+Genfo,Breakfast,413,19.6,30.4,58.9,0.4
+Azifa,Salad,511,7.6,1.7,21.2,13.7
+Dulet,Mixed,227,32.7,34.4,73.8,0.4
+Kitcha,Bread,461,22.1,14.5,10.1,2.8
+Shinkurt Tibs,Beef Dish,162,31.8,5.6,65.8,4.8
+Enkulal Firfir,Mixed,421,28.4,4.2,55.2,0.7
+Chechebsa,Breakfast,594,17.3,5.0,13.9,6.0
+Salata,Salad,342,34.9,21.7,23.8,6.6
+Buticha,Legume Stew,632,15.8,33.2,41.1,3.7
+Fish Tibs,Seafood,539,6.6,14.2,82.8,0.1
+Shiro Wat,Legume Stew,505,10.0,15.8,29.5,6.9
+Beef Alicha,Beef Dish,359,14.3,29.6,69.4,3.9
+Gomen Besiga,Mixed,614,9.9,13.8,42.9,6.0
+Lamb Tibs,Lamb Dish,615,16.5,19.2,64.5,12.2
+Egg Tibs,Mixed,512,5.4,21.7,10.1,12.4
+Lentil Salad,Salad,135,23.4,19.4,53.4,14.3
+Misir Wat,Legume Stew,297,29.8,13.1,80.9,5.8
+Tomato Fitfit,Salad,635,23.1,27.9,44.6,6.7
+Shinkurt Tibs,Beef Dish,411,26.0,29.1,7.4,4.7
+Ambasha,Bread,290,5.9,15.0,22.9,8.9
+Beyaynetu,Mixed,260,18.3,13.4,81.7,3.8
+Corn Genfo,Breakfast,593,32.8,15.8,72.5,6.7
+Bozena Shiro,Legume Stew,200,34.7,4.7,52.6,11.7
+Fatira,Breakfast,475,28.2,8.3,22.2,0.2
+Dereq Tibs,Beef Dish,437,26.8,9.9,78.4,11.1
+Corn Genfo,Breakfast,357,30.1,30.6,39.6,14.2
+Duba Wat,Vegetable,504,7.3,4.5,48.6,3.7
+Asa Wat,Seafood,493,24.6,4.9,72.5,6.5
+Fish Tibs,Seafood,322,5.7,22.1,33.5,12.8
+Fosolia,Vegetable,559,15.8,5.3,48.7,10.4
+Chickpea Stew,Legume Stew,554,8.3,13.7,74.7,1.3
+Shinkurt Tibs,Beef Dish,302,16.4,26.7,34.7,11.1
+Ye Beg Wat,Lamb Dish,200,8.7,9.3,7.5,9.9
+Cabbage Stew,Vegetable,547,9.7,20.4,70.6,12.8
+Chickpea Stew,Legume Stew,591,23.1,12.9,34.3,1.4
+Shrimp Tibs,Seafood,410,27.9,12.9,84.1,0.0
+Himbasha,Bread,551,33.5,26.0,16.3,5.1
+Beyaynetu,Mixed,537,9.4,31.1,33.3,5.6
+Ye Beg Wat,Lamb Dish,279,30.5,14.5,60.8,10.0
+Azifa,Salad,229,33.9,34.4,77.7,8.9
+Injera,Bread,622,28.5,8.0,76.1,10.8
+Lamb Tibs,Lamb Dish,330,4.7,18.0,15.0,11.6
+Ye Beg Wat,Lamb Dish,130,34.1,20.0,65.1,12.1
+Dereq Tibs,Beef Dish,459,2.8,20.1,78.0,5.5
+Key Wat,Mixed,539,8.6,18.3,9.2,9.0
+Ambasha,Bread,226,31.1,7.1,45.0,6.8
+Fatira,Breakfast,413,29.2,8.9,15.9,13.7
+Fosolia,Vegetable,297,15.6,6.3,41.7,8.9
+Chickpea Stew,Legume Stew,297,22.1,4.7,27.3,14.2
+Ye Beg Wat,Lamb Dish,539,28.7,30.5,38.7,14.2
+Gored Gored,Beef Dish,142,21.7,8.1,54.5,7.9
+Spiced Lentils,Legume Stew,136,17.4,5.5,44.2,8.7
+Tomato Fitfit,Salad,357,20.1,7.5,76.4,5.8
+Firfir,Mixed,220,9.9,19.0,72.1,3.5
+Salata,Salad,604,24.8,17.6,25.0,3.7
+Lamb Tibs,Lamb Dish,125,31.1,7.2,16.7,3.6
+Azifa,Salad,188,28.3,24.5,30.4,4.0
+Himbasha,Bread,482,25.8,34.8,85.7,6.2
+Tikil Gomen,Vegetable,257,22.0,29.4,25.0,14.8
+Azifa,Salad,347,5.1,8.5,48.2,3.1
+Salata,Salad,642,29.0,17.8,49.2,2.8
+Key Wat,Mixed,147,5.4,18.0,78.1,8.1
+Fish Tibs,Seafood,597,21.5,5.1,54.7,6.5
+Azifa,Salad,243,12.8,28.1,44.6,0.9
+Cabbage Stew,Vegetable,273,25.8,20.6,75.3,1.8
+Beef Alicha,Beef Dish,154,15.3,2.3,23.1,4.6
+Gomen Besiga,Mixed,190,30.6,26.0,65.4,6.3
+Key Wat,Mixed,499,9.9,27.9,18.1,5.2
+Barley Kinche,Breakfast,388,9.1,22.0,23.5,13.0
+Key Wat,Mixed,587,29.5,23.7,88.7,13.0
+Egg Tibs,Mixed,488,4.6,28.7,31.5,0.9
+Avocado Salad,Salad,504,28.6,1.6,53.0,14.8
+Kitcha,Bread,453,24.0,20.1,82.8,8.8
+Anbasha,Bread,550,17.4,18.6,72.6,0.3
+Shrimp Tibs,Seafood,299,25.0,13.1,67.3,14.9
+Tibs,Beef Dish,290,32.5,5.4,8.4,5.7
+Dulet,Mixed,341,30.2,13.8,59.8,13.4
+Cabbage Stew,Vegetable,548,28.5,25.9,39.2,0.4
+Enkulal Firfir,Mixed,629,33.2,2.2,21.4,0.5
+Teff Porridge,Breakfast,221,34.3,17.3,68.3,10.0
+Genfo,Breakfast,650,4.3,7.3,49.7,2.9
+Fish Tibs,Seafood,577,21.9,14.4,87.2,14.1
+Enkulal Firfir,Mixed,349,33.9,1.6,47.0,6.9
+Carrot & Potato Wat,Vegetable,151,25.2,22.2,16.1,6.5
+Lamb Tibs,Lamb Dish,383,33.6,8.2,27.4,14.3
+Gomen,Vegetable,291,31.8,18.4,19.3,7.6
+Misir Wat,Legume Stew,601,28.8,17.3,83.5,0.2
+Egg Tibs,Mixed,409,13.0,27.4,68.8,15.0
+Egg Tibs,Mixed,163,19.2,17.5,24.4,6.2
+Kinche,Breakfast,506,11.5,23.6,75.4,10.0
+Buticha,Legume Stew,207,26.9,18.4,73.8,9.1
+Shiro Wat,Legume Stew,329,31.1,31.9,41.2,4.4
+Ful,Mixed,308,6.6,26.6,16.0,11.0
+Ambasha,Bread,502,6.8,9.3,19.5,0.1
+Vegetable Tibs,Vegetable,394,29.0,16.9,45.8,4.3
+Doro Wat,Chicken Dish,321,17.7,1.1,83.2,4.8
+Misir Wat,Legume Stew,329,6.6,18.2,29.5,10.7
+Fatira,Breakfast,484,19.6,12.6,47.8,9.9
+Chechebsa,Breakfast,275,4.5,20.6,42.4,10.6
+Cabbage Stew,Vegetable,287,21.0,24.1,70.4,2.8
+Corn Genfo,Breakfast,490,4.1,3.0,42.8,15.0
+Avocado Salad,Salad,139,15.2,32.7,14.8,13.8
+Firfir,Mixed,590,15.8,28.2,42.7,7.1
+Fosolia,Vegetable,160,18.9,8.8,76.1,10.6
+Spiced Lentils,Legume Stew,136,15.6,4.9,21.8,6.3
+Ful,Mixed,152,11.8,4.8,74.8,4.3
+Kitcha Fitfit,Mixed,400,6.4,19.1,83.8,2.8
+Beyaynetu,Mixed,501,12.7,4.1,42.0,1.7
+Chicken Tibs,Chicken Dish,569,5.3,12.8,15.5,9.3
+Shrimp Tibs,Seafood,650,23.1,22.0,13.1,7.4
+Gomen,Vegetable,531,18.3,5.4,63.1,2.0
+Kik Alicha,Legume Stew,343,5.1,13.1,69.4,6.2
+Teff Porridge,Breakfast,438,33.7,21.1,64.2,14.3
+Lentil Salad,Salad,554,11.8,28.4,89.9,8.8
+Siljo,Legume Stew,415,25.3,29.3,67.4,1.8
+Shrimp Tibs,Seafood,258,4.4,5.1,34.2,12.9
+Chickpea Stew,Legume Stew,247,31.2,21.3,74.8,6.1
+Lentil Salad,Salad,408,15.4,33.4,5.0,14.6
+Timatim Fitfit,Mixed,172,24.5,7.6,34.5,12.9
+Gomen,Vegetable,301,14.4,11.9,20.6,12.9
+Kitcha Fitfit,Mixed,231,11.6,3.4,84.3,9.1
+Shimbra Asa,Legume Stew,622,33.3,5.6,36.9,6.1
+Chechebsa,Breakfast,457,10.9,17.2,16.7,4.8
+Kinche,Breakfast,363,28.4,31.5,25.1,4.6
+Duba Wat,Vegetable,330,6.2,25.8,72.4,0.6
+Key Wat,Mixed,555,5.2,32.2,48.3,13.7
+Dereq Tibs,Beef Dish,539,7.1,18.1,53.2,10.2
+Shrimp Tibs,Seafood,455,23.8,9.6,84.8,1.1
+Chicken Tibs,Chicken Dish,457,4.2,20.8,82.7,11.1
+Vegetable Tibs,Vegetable,519,8.6,20.6,67.2,10.4
+Ambasha,Bread,414,30.1,14.4,19.6,6.0
+Beef Alicha,Beef Dish,365,29.9,9.8,49.3,4.6
+Timatim Fitfit,Mixed,623,26.1,15.9,50.0,0.4
+Fosolia,Vegetable,186,9.5,18.1,56.5,7.3
+Carrot & Potato Wat,Vegetable,451,15.2,15.4,55.1,10.2
+Spiced Lentils,Legume Stew,234,11.0,17.7,21.0,10.0
+Kitcha,Bread,178,16.2,21.0,19.0,14.4
+Gomen,Vegetable,528,29.3,32.6,22.6,6.1
+Firfir,Mixed,467,21.5,1.8,89.5,2.9
+Ye Beg Alicha,Lamb Dish,496,15.8,7.4,32.6,10.0
+Doro Wat,Chicken Dish,307,18.4,33.7,48.9,13.5
+Kitcha Fitfit,Mixed,135,28.0,30.9,80.7,7.6
+Bozena Shiro,Legume Stew,150,8.7,29.2,83.0,1.5
+Chechebsa,Breakfast,326,27.5,26.8,83.6,2.2
+Egg Tibs,Mixed,526,25.7,16.4,80.1,3.3
+Chicken Tibs,Chicken Dish,164,22.8,16.7,69.9,14.9
+Carrot & Potato Wat,Vegetable,131,26.8,14.7,47.0,7.6
+Salata,Salad,288,2.7,9.6,41.6,14.2
+Gomen Besiga,Mixed,201,6.5,14.6,8.2,2.0
+Injera Firfir,Mixed,160,17.6,24.3,20.8,1.1
+Himbasha,Bread,472,19.6,19.8,72.0,4.6
+Tikil Gomen,Vegetable,437,4.5,25.7,89.0,1.3
+Genfo,Breakfast,585,24.7,11.1,80.8,12.0
+Asa Wat,Seafood,376,15.7,10.3,53.6,9.5
+Atkilt Wat,Vegetable,649,5.3,6.1,19.9,7.3
+Spiced Lentils,Legume Stew,286,21.5,20.3,88.4,6.3
+Spiced Lentils,Legume Stew,450,20.0,33.1,20.4,10.5
+Kitfo,Beef Dish,356,10.0,15.0,17.1,9.5
+Ambasha,Bread,613,9.4,7.6,54.8,2.7
+Tikil Gomen,Vegetable,487,7.0,20.1,30.1,5.8
+Chechebsa,Breakfast,420,17.8,27.9,83.8,12.0
+Azifa,Salad,457,14.0,16.5,80.9,0.8
+Duba Wat,Vegetable,256,9.7,30.9,89.9,4.1
+Ful,Mixed,219,19.2,10.9,63.9,14.0
+Teff Porridge,Breakfast,565,12.9,6.5,35.8,3.0
+Injera,Bread,429,25.5,21.9,79.3,14.2
+Tibs,Beef Dish,487,17.0,1.4,69.6,1.3
+Dereq Tibs,Beef Dish,291,26.4,30.2,69.2,4.6
+Cabbage Stew,Vegetable,522,22.2,16.6,67.2,10.1
+Carrot & Potato Wat,Vegetable,343,15.1,24.7,84.0,10.7
+Corn Genfo,Breakfast,487,6.8,26.6,67.4,10.0
+Kitcha,Bread,649,15.1,23.1,84.4,3.1
+Teff Porridge,Breakfast,186,25.7,24.8,14.4,8.1
+Atkilt Wat,Vegetable,318,30.7,21.3,78.7,13.2
+Asa Wat,Seafood,199,10.1,27.0,53.5,13.8
+Ambasha,Bread,489,24.4,21.9,13.6,1.7
+Buticha,Legume Stew,477,34.0,17.5,44.8,1.8
+Kitfo,Beef Dish,447,24.0,9.9,74.8,1.9
+Chicken Tibs,Chicken Dish,234,16.1,12.8,37.1,5.3
+Tikil Gomen,Vegetable,174,17.8,10.7,24.5,11.7
+Shimbra Asa,Legume Stew,510,27.9,26.1,50.1,2.8
+Gomen,Vegetable,255,28.6,30.7,36.7,1.9
+Azifa,Salad,208,27.5,20.3,62.9,4.3
+Kik Alicha,Legume Stew,382,15.9,10.8,89.5,1.8
+Shinkurt Tibs,Beef Dish,368,32.7,21.8,38.8,10.6
+Vegetable Tibs,Vegetable,139,27.6,5.1,34.6,9.7
+Avocado Salad,Salad,450,6.1,3.1,45.8,8.4
+Siljo,Legume Stew,180,24.0,24.9,22.2,0.6
+Beef Alicha,Beef Dish,169,7.4,23.6,47.2,0.9
+Kitfo,Beef Dish,513,11.1,28.2,88.3,4.5
+Chechebsa,Breakfast,153,21.5,18.4,66.9,11.0
+Gored Gored,Beef Dish,355,22.5,24.6,11.8,8.9
+Tikil Gomen,Vegetable,256,32.3,24.3,63.1,0.0
+Shrimp Tibs,Seafood,375,21.7,32.6,11.2,11.2
+Chickpea Stew,Legume Stew,631,20.4,8.4,69.0,1.3
+Ye Beg Alicha,Lamb Dish,534,7.5,33.0,9.5,9.3
+Ye Beg Alicha,Lamb Dish,568,6.8,2.0,26.4,2.4
+Ful,Mixed,359,16.6,10.2,60.6,8.8
+Fatira,Breakfast,598,20.0,3.8,57.6,0.7
+Cabbage Stew,Vegetable,330,3.5,20.9,27.4,9.5
+Ye Beg Alicha,Lamb Dish,629,14.3,31.6,69.4,8.8
+Chechebsa,Breakfast,413,7.9,30.0,68.6,12.1
+Timatim Fitfit,Mixed,589,30.0,17.5,32.6,12.3
+Bozena Shiro,Legume Stew,574,29.7,1.8,51.6,7.0
+Gored Gored,Beef Dish,232,25.7,22.3,59.2,10.7
+Ye Beg Alicha,Lamb Dish,626,5.6,16.4,58.9,10.9
+Tibs,Beef Dish,271,10.7,3.9,44.9,10.8
+Teff Porridge,Breakfast,144,17.0,20.2,10.2,4.2
+Teff Porridge,Breakfast,459,8.1,7.8,37.7,5.1
+Beef Alicha,Beef Dish,244,26.4,32.9,81.9,8.1
+Vegetable Tibs,Vegetable,498,31.6,14.7,54.1,0.6
+Shimbra Asa,Legume Stew,463,19.4,25.1,77.2,8.6
+Kitcha,Bread,420,14.2,2.5,75.2,4.4
+Doro Wat,Chicken Dish,212,23.8,23.8,24.6,2.9
+Ful,Mixed,477,6.2,5.4,61.7,6.8
+Atkilt Wat,Vegetable,381,10.9,25.3,35.3,0.3
+Anbasha,Bread,222,19.4,22.7,47.8,6.4
+Dulet,Mixed,600,14.9,32.5,11.9,13.5
+Carrot & Potato Wat,Vegetable,499,7.9,22.9,16.4,5.7
+Tibs,Beef Dish,279,4.4,9.6,8.3,1.5
+Beef Alicha,Beef Dish,276,27.2,24.7,69.2,0.5
+Gored Gored,Beef Dish,594,24.5,17.2,23.6,1.5
+Atkilt Wat,Vegetable,530,6.6,32.3,88.7,14.0
+Dulet,Mixed,279,16.2,11.9,10.0,12.6
+Kinche,Breakfast,308,34.3,2.4,80.0,12.9
+Firfir,Mixed,272,2.8,17.7,20.9,11.0
+Tomato Fitfit,Salad,437,28.0,24.2,63.2,13.2
+Azifa,Salad,172,28.3,1.6,14.5,10.1
+Teff Porridge,Breakfast,426,6.0,16.2,69.9,5.9
+Duba Wat,Vegetable,393,30.3,21.5,37.5,6.1
+Avocado Salad,Salad,305,15.5,33.4,89.0,3.5
+Kitfo,Beef Dish,421,7.3,11.7,34.2,7.0
+Gored Gored,Beef Dish,172,32.8,19.3,59.5,2.7
+Beef Alicha,Beef Dish,585,3.5,32.3,51.6,6.5
+Beef Alicha,Beef Dish,563,32.2,29.5,51.5,13.6
+Kitcha,Bread,251,4.5,5.1,64.2,9.4
+Tibs,Beef Dish,316,26.9,10.2,23.6,7.5
+Doro Wat,Chicken Dish,516,28.0,15.4,71.4,7.0
+Gored Gored,Beef Dish,602,30.4,13.8,22.4,0.2
+Chechebsa,Breakfast,552,24.2,4.9,73.0,4.1
+Injera,Bread,328,15.8,18.5,48.6,4.6
+Tomato Fitfit,Salad,268,10.1,4.9,10.5,5.4
+Ye Beg Alicha,Lamb Dish,433,14.1,22.7,16.4,7.9
+Himbasha,Bread,442,16.8,20.7,32.6,1.3
+Vegetable Tibs,Vegetable,294,8.6,28.0,13.4,13.9
+Gomen Besiga,Mixed,144,15.1,9.3,24.8,3.6
+Enkulal Firfir,Mixed,271,11.2,25.6,80.4,10.7
+Tikil Gomen,Vegetable,543,17.3,18.9,70.7,3.3
+Chechebsa,Breakfast,223,4.8,15.5,74.2,6.9
+Fosolia,Vegetable,522,15.3,26.5,62.9,6.1
+Ye Beg Wat,Lamb Dish,128,11.7,22.4,28.4,1.6
+Fosolia,Vegetable,343,4.2,12.4,5.7,9.3
+Kitcha,Bread,134,34.6,1.9,75.2,11.5
+Anbasha,Bread,469,29.8,5.0,47.7,9.7
+Firfir,Mixed,375,26.3,26.6,15.8,11.9
+Tomato Fitfit,Salad,145,29.2,3.1,5.2,11.0
+Chicken Tibs,Chicken Dish,225,31.4,4.4,50.4,4.3
+Carrot & Potato Wat,Vegetable,552,10.2,3.0,56.7,5.9
+Firfir,Mixed,550,2.6,12.6,82.9,6.6
+Tibs,Beef Dish,570,17.7,16.8,19.2,8.8
+Tikil Gomen,Vegetable,260,31.9,16.1,64.1,13.9
+Anbasha,Bread,219,13.3,35.0,86.2,8.1
+Dereq Tibs,Beef Dish,432,30.5,1.6,32.1,1.9
+Injera,Bread,255,23.0,12.6,39.2,10.0
+Beef Alicha,Beef Dish,382,25.1,15.7,65.3,2.3
+Chicken Tibs,Chicken Dish,530,10.4,1.0,37.0,9.9
+Chicken Tibs,Chicken Dish,154,20.6,3.8,77.7,13.6
+Kitfo,Beef Dish,153,28.7,5.8,76.4,3.1
+Ful,Mixed,290,33.8,34.6,88.5,11.1
+Dulet,Mixed,290,3.7,1.4,89.8,6.5
+Ambasha,Bread,635,34.8,20.3,16.2,12.3
+Buticha,Legume Stew,633,15.1,18.9,19.5,8.9
+Ful,Mixed,255,16.9,20.6,17.1,13.9
+Bozena Shiro,Legume Stew,191,6.9,12.2,61.6,5.1
+Fish Tibs,Seafood,398,10.1,31.3,23.9,4.2
+Kik Alicha,Legume Stew,636,17.6,8.1,57.9,12.7
+Corn Genfo,Breakfast,592,6.0,7.9,34.3,9.3
+Fatira,Breakfast,408,31.8,34.3,14.7,10.2
+Misir Wat,Legume Stew,195,11.7,11.9,59.2,5.8
+Shinkurt Tibs,Beef Dish,135,5.4,17.5,60.9,7.3
+Lentil Salad,Salad,136,25.2,32.6,31.3,13.9
+Kik Alicha,Legume Stew,205,8.0,22.3,29.0,4.6
+Himbasha,Bread,205,17.8,28.8,50.6,0.3
+Salata,Salad,344,6.2,30.3,5.9,3.6
+Anbasha,Bread,465,10.5,28.3,26.2,3.4
+Avocado Salad,Salad,593,13.1,7.4,38.5,6.9
+Fatira,Breakfast,474,33.0,14.8,26.8,0.3
+Vegetable Tibs,Vegetable,480,30.8,22.3,24.2,2.9
+Injera Firfir,Mixed,528,2.2,5.3,31.6,12.6
+Shimbra Asa,Legume Stew,155,32.2,12.2,28.9,5.6
+Fosolia,Vegetable,436,9.6,4.7,50.9,4.0
+Cabbage Stew,Vegetable,217,8.4,9.8,73.3,13.4
+Corn Genfo,Breakfast,488,11.0,32.5,34.6,13.6
+Kinche,Breakfast,397,11.0,13.0,33.2,3.5
+Fosolia,Vegetable,253,7.1,27.7,6.5,13.3
+Shrimp Tibs,Seafood,470,9.6,10.7,21.6,7.4
+Beyaynetu,Mixed,298,21.2,10.9,18.7,6.2
+Injera,Bread,229,11.3,13.1,53.7,6.5

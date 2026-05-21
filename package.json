@@ -10,7 +10,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
+    "prisma:seed": "node prisma/seed.js",
+    "cron:meal-plans": "node -e \"require('./src/jobs/dailyMealPlans').runDailyMealPlans().then(r=>{console.log(r);process.exit(r.failed?1:0)}).catch(e=>{console.error(e);process.exit(1)})\"",
     "start": "node src/server.js"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
@@ -21,6 +26,7 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "jsonwebtoken": "^9.0.3",
+    "node-cron": "^4.2.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pg": "^8.20.0",
