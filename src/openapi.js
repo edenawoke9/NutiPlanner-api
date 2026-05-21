@@ -3,9 +3,14 @@ const openapi = {
   info: {
     title: "NutPlanner API",
     version: "1.0.0",
-    description: "Backend API documentation for Smart Nutrition Planner.",
+    description:
+      "Smart Nutrition Planner API. Meal plans are generated with cosine-similarity matching on Ethiopian food data (not Gemini). " +
+      "Foods used 4+ times in the past 7 days are excluded. A daily job at 5:00 AM regenerates today's plan for all users with a profile.",
   },
-  servers: [{ url: "https://nutiplanner-api-2.onrender.com" }],
+  servers: [
+    { url: "http://localhost:4001", description: "Local development" },
+    { url: "https://nutiplanner-api-2.onrender.com", description: "Production" },
+  ],
   tags: [
     { name: "Health" },
     { name: "User" },
@@ -51,18 +56,117 @@ const openapi = {
           password: { type: "string", format: "password" },
         },
       },
+      FoodItem: {
+        type: "object",
+        properties: {
+          foodId: { type: "integer" },
+          foodName: { type: "string" },
+          foodCalories: { type: "number", description: "Calories per 100g" },
+          foodProtein: { type: "number" },
+          carbs: { type: "number" },
+          fat: { type: "number" },
+          category: {
+            type: "string",
+            description: "CSV category e.g. Breakfast, Bread, Legume Stew",
+          },
+          foodType: {
+            type: "string",
+            enum: ["fruit", "vegetable", "meat", "dairy", "grain", "snack", "drink"],
+          },
+          createdAt: { type: "string", format: "date-time" },
+        },
+      },
       FoodItemCreateRequest: {
         type: "object",
         required: ["foodName", "foodCalories"],
         properties: {
           foodName: { type: "string" },
-          foodCalories: { type: "number" },
+          foodCalories: { type: "number", description: "Calories per 100g" },
           foodProtein: { type: "number" },
           carbs: { type: "number" },
           fat: { type: "number" },
+          category: { type: "string" },
           foodType: {
             type: "string",
             enum: ["fruit", "vegetable", "meat", "dairy", "grain", "snack", "drink"],
+          },
+        },
+      },
+      NutritionTotals: {
+        type: "object",
+        properties: {
+          calories: { type: "number" },
+          protein: { type: "number" },
+          carbs: { type: "number" },
+          fat: { type: "number" },
+        },
+      },
+      NutritionTargets: {
+        type: "object",
+        properties: {
+          bmi: { type: "number" },
+          bmr: { type: "number" },
+          tdee: { type: "number" },
+          calorieGoal: { type: "number" },
+          proteinGoal: { type: "number" },
+          carbsGoal: { type: "number" },
+          fatGoal: { type: "number" },
+          activityMultiplier: { type: "number" },
+        },
+      },
+      MealPlanItem: {
+        type: "object",
+        properties: {
+          mealPlanItemId: { type: "integer" },
+          mealPlanId: { type: "integer" },
+          mealType: { type: "string", enum: ["breakfast", "lunch", "dinner", "snack"] },
+          foodId: { type: "integer" },
+          quantity: {
+            type: "number",
+            description: "Multiplier on per-100g macros (portionGrams / 100)",
+          },
+          calories: { type: "number" },
+          protein: { type: "number" },
+          carbs: { type: "number" },
+          fat: { type: "number" },
+          notes: { type: "string" },
+          food: { $ref: "#/components/schemas/FoodItem" },
+        },
+      },
+      MealPlan: {
+        type: "object",
+        properties: {
+          mealPlanId: { type: "integer" },
+          userId: { type: "integer" },
+          planDate: { type: "string", format: "date" },
+          calorieGoal: { type: "integer" },
+          proteinGoal: { type: "number" },
+          carbsGoal: { type: "number" },
+          fatGoal: { type: "number" },
+          startTime: { type: "string", format: "date-time", nullable: true },
+          endTime: { type: "string", format: "date-time", nullable: true },
+          generatedBy: {
+            type: "string",
+            description: "e.g. stochastic, stochastic-cron",
+          },
+          notes: { type: "string", nullable: true },
+          createdAt: { type: "string", format: "date-time" },
+          items: {
+            type: "array",
+            items: { $ref: "#/components/schemas/MealPlanItem" },
+          },
+        },
+      },
+      GenerateMealPlanResponse: {
+        type: "object",
+        properties: {
+          targets: { $ref: "#/components/schemas/NutritionTargets" },
+          totals: { $ref: "#/components/schemas/NutritionTotals" },
+          mealPlan: { $ref: "#/components/schemas/MealPlan" },
+          excludedFoods: {
+            type: "array",
+            items: { type: "string" },
+            description: "Food names skipped (used 4+ times in the last 7 days)",
           },
         },
       },
@@ -155,6 +259,7 @@ const openapi = {
             "application/json": {
               schema: {
                 type: "object",
+                required: ["fullName", "healthGoal"],
                 properties: {
                   fullName: { type: "string" },
                   weight: { type: "number" },
@@ -266,8 +371,22 @@ const openapi = {
       get: {
         tags: ["Meal Plans"],
         summary: "List my meal plans",
+        description: "Returns plans newest first, each with items and linked food details.",
         security: [{ bearerAuth: [] }],
-        responses: { "200": { description: "Meal plans" } },
+        responses: {
+          "200": {
+            description: "Meal plans",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/MealPlan" },
+                },
+              },
+            },
+          },
+          "401": { description: "Unauthorized" },
+        },
       },
       post: {
         tags: ["Meal Plans"],
@@ -303,14 +422,31 @@ const openapi = {
       get: {
         tags: ["Meal Plans"],
         summary: "Get computed nutrition targets from profile",
+        description: "Uses Mifflin-St Jeor BMR, activity multiplier, and health goal adjustments.",
         security: [{ bearerAuth: [] }],
-        responses: { "200": { description: "Targets" } },
+        responses: {
+          "200": {
+            description: "Daily macro and calorie targets",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/NutritionTargets" },
+              },
+            },
+          },
+          "400": { description: "Insufficient profile data" },
+          "401": { description: "Unauthorized" },
+          "404": { description: "Profile not set up" },
+        },
       },
     },
     "/meal-plans/generate": {
       post: {
         tags: ["Meal Plans"],
-        summary: "Generate AI meal plan via Gemini",
+        summary: "Generate meal plan (stochastic matcher)",
+        description:
+          "Builds breakfast, lunch, and dinner using cosine similarity on Ethiopian food CSV data. " +
+          "Excludes foods used 4+ times in the last 7 days and avoids repeating the same food twice in one day. " +
+          "Requires a complete user profile and seeded FoodItem table.",
         security: [{ bearerAuth: [] }],
         requestBody: {
           required: true,
@@ -319,24 +455,71 @@ const openapi = {
               schema: {
                 type: "object",
                 required: ["planDate"],
-                properties: { planDate: { type: "string", format: "date" } },
+                properties: {
+                  planDate: {
+                    type: "string",
+                    format: "date",
+                    example: "2026-05-21",
+                  },
+                },
               },
             },
           },
         },
         responses: {
-          "201": { description: "Generated meal plan" },
-          "422": { description: "Generated plan outside tolerance" },
+          "201": {
+            description: "Generated meal plan with food details",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/GenerateMealPlanResponse" },
+              },
+            },
+          },
+          "400": { description: "Missing profile or no food data" },
+          "401": { description: "Unauthorized" },
+          "404": { description: "Profile not set up" },
+          "422": {
+            description: "Generated plan outside ±8% calorie tolerance",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    message: { type: "string" },
+                    totals: { $ref: "#/components/schemas/NutritionTotals" },
+                    target: { type: "number" },
+                  },
+                },
+              },
+            },
+          },
+          "500": { description: "Server error" },
         },
       },
     },
     "/meal-plans/{id}/regenerate": {
       post: {
         tags: ["Meal Plans"],
-        summary: "Regenerate AI meal plan",
+        summary: "Regenerate an existing meal plan",
+        description:
+          "Deletes the plan by id, then generates a new plan for the same date with the same weekly-exclusion rules as /generate.",
         security: [{ bearerAuth: [] }],
         parameters: [{ in: "path", name: "id", required: true, schema: { type: "integer" } }],
-        responses: { "201": { description: "Regenerated meal plan" } },
+        responses: {
+          "201": {
+            description: "Regenerated meal plan",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/GenerateMealPlanResponse" },
+              },
+            },
+          },
+          "400": { description: "Invalid meal plan id" },
+          "401": { description: "Unauthorized" },
+          "404": { description: "Meal plan not found" },
+          "422": { description: "Generated plan outside calorie tolerance" },
+          "500": { description: "Server error" },
+        },
       },
     },
     "/meal-logs": {
@@ -580,7 +763,8 @@ const openapi = {
     "/chat/message": {
       post: {
         tags: ["Chat"],
-        summary: "Chat with nutrition assistant",
+        summary: "Chat with nutrition assistant (Gemini)",
+        description: "Uses GEMINI_API_KEY. Meal plan generation does not use this endpoint.",
         security: [{ bearerAuth: [] }],
         requestBody: {
           required: true,
@@ -596,7 +780,7 @@ const openapi = {
         },
         responses: {
           "200": { description: "Chat response + optional meal suggestion" },
-          "500": { description: "Gemini error or internal failure" },
+          "500": { description: "Chat or internal failure" },
         },
       },
     },

@@ -1,6 +1,11 @@
 const prisma = require("../prisma");
 const { calculateNutritionTargets } = require("../services/nutritionTargetService");
-const { generateAiMealPlan } = require("../services/mealPlanning/aiMealPlan");
+const {
+  generateMealPlanForUser,
+  regenerateMealPlanForUser,
+  deleteMealPlanById,
+} = require("../services/mealPlanning/mealPlanService");
+const { getExcludedFoodNames } = require("../services/mealPlanning/weeklyFoodLimit");
 
 function calculateItemNutrition(food, quantity) {
   return {
@@ -9,24 +14,6 @@ function calculateItemNutrition(food, quantity) {
     carbs: Number(food.carbs || 0) * quantity,
     fat: Number(food.fat || 0) * quantity,
   };
-}
-
-function sumNutrition(items) {
-  return items.reduce(
-    (acc, item) => ({
-      calories: acc.calories + item.calories,
-      protein: acc.protein + item.protein,
-      carbs: acc.carbs + item.carbs,
-      fat: acc.fat + item.fat,
-    }),
-    { calories: 0, protein: 0, carbs: 0, fat: 0 }
-  );
-}
-
-function isWithinCalorieTolerance(calories, target, tolerancePct = 8) {
-  if (!target || target <= 0) return true;
-  const diffPct = Math.abs(calories - target) / target * 100;
-  return diffPct <= tolerancePct;
 }
 
 async function getMealPlans(req, res) {
@@ -156,80 +143,27 @@ async function generateMealPlan(req, res) {
   }
 
   try {
-    const userInfo = await prisma.userInfo.findUnique({ where: { userId } });
-    if (!userInfo) return res.status(404).json({ message: "Complete profile setup first" });
-
-    const targets = calculateNutritionTargets(userInfo);
-    if (!targets) {
-      return res.status(400).json({ message: "Insufficient profile data for target calculation" });
-    }
-
-    const foods = await prisma.foodItem.findMany({
-      orderBy: { foodName: "asc" },
-      take: 80,
-    });
-    if (!foods.length) return res.status(400).json({ message: "No food data available" });
-
-    const aiPlan = await generateAiMealPlan({
-      userInfo,
-      targets,
-      foods,
+    const excludeFoodNames = await getExcludedFoodNames(userId, planDate);
+    const result = await generateMealPlanForUser({
+      userId,
       planDate,
+      generatedBy: "stochastic",
+      excludeFoodNames,
     });
 
-    const foodMap = new Map(foods.map((food) => [food.foodId, food]));
-    const validatedItems = aiPlan.items.map((item) => {
-      const foodId = Number(item.foodId);
-      const quantity = Number(item.quantity || 1);
-      const food = foodMap.get(foodId);
-      if (!food) throw new Error(`AI selected unknown foodId ${foodId}`);
-      if (!["breakfast", "lunch", "dinner", "snack"].includes(item.mealType)) {
-        throw new Error(`AI returned invalid mealType ${item.mealType}`);
-      }
-
-      const nutrition = calculateItemNutrition(food, quantity);
-      return {
-        mealType: item.mealType,
-        foodId,
-        quantity,
-        calories: nutrition.calories,
-        protein: nutrition.protein,
-        carbs: nutrition.carbs,
-        fat: nutrition.fat,
-      };
-    });
-
-    const totals = sumNutrition(validatedItems);
-    if (!isWithinCalorieTolerance(totals.calories, targets.calorieGoal, 8)) {
-      return res.status(422).json({
-        message: "Generated meal plan is outside calorie tolerance",
-        totals,
-        target: targets.calorieGoal,
+    if (!result.ok) {
+      return res.status(result.status).json({
+        message: result.message,
+        ...(result.totals ? { totals: result.totals, target: result.target } : {}),
       });
     }
 
-    const mealPlan = await prisma.mealPlan.create({
-      data: {
-        userId,
-        planDate: new Date(planDate),
-        calorieGoal: targets.calorieGoal,
-        proteinGoal: targets.proteinGoal,
-        carbsGoal: targets.carbsGoal,
-        fatGoal: targets.fatGoal,
-        generatedBy: "gemini",
-        ...(aiPlan.notes ? { notes: aiPlan.notes } : {}),
-        items: {
-          create: validatedItems,
-        },
-      },
-      include: {
-        items: {
-          include: { food: true },
-        },
-      },
+    return res.status(result.status).json({
+      targets: result.targets,
+      totals: result.totals,
+      mealPlan: result.mealPlan,
+      excludedFoods: result.excludedFoods,
     });
-
-    return res.status(201).json({ targets, totals, mealPlan });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error", error: error.message || error });
   }
@@ -248,11 +182,27 @@ async function regenerateMealPlan(req, res) {
     });
     if (!plan) return res.status(404).json({ message: "Meal plan not found" });
 
-    await prisma.mealPlanItem.deleteMany({ where: { mealPlanId } });
-    await prisma.mealPlan.delete({ where: { mealPlanId } });
+    await deleteMealPlanById(mealPlanId);
 
-    req.body.planDate = plan.planDate;
-    return generateMealPlan(req, res);
+    const result = await regenerateMealPlanForUser({
+      userId,
+      planDate: plan.planDate,
+      generatedBy: "stochastic",
+    });
+
+    if (!result.ok) {
+      return res.status(result.status).json({
+        message: result.message,
+        ...(result.totals ? { totals: result.totals, target: result.target } : {}),
+      });
+    }
+
+    return res.status(result.status).json({
+      targets: result.targets,
+      totals: result.totals,
+      mealPlan: result.mealPlan,
+      excludedFoods: result.excludedFoods,
+    });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error", error });
   }

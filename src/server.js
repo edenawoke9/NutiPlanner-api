@@ -12,6 +12,7 @@ const feedbackRouter = require("./routes/feedbackRoute");
 const adminRouter = require("./routes/adminRoute");
 const chatRouter = require("./routes/chatRoute");
 const { rateLimit } = require("./rateLimit");
+const { startDailyMealPlanCron } = require("./jobs/scheduleDailyMealPlans");
 
 dotenv.config();
 
@@ -130,6 +131,7 @@ function startServer(port, isFallback = false) {
     });
     // #endregion
     console.log(`app running on port ${port}`);
+    startDailyMealPlanCron();
   });
 
   server.on("error", (error) => {
