@@ -31,8 +31,25 @@ function parseCsvLine(line) {
   return result;
 }
 
-function loadFoodCsv(csvPath = process.env.FOOD_CSV_PATH || DEFAULT_CSV_PATH) {
-  const raw = fs.readFileSync(csvPath, "utf8");
+function resolveCsvPath(explicitPath) {
+  if (explicitPath) return explicitPath;
+  if (process.env.FOOD_CSV_PATH) return process.env.FOOD_CSV_PATH;
+
+  const candidates = [
+    DEFAULT_CSV_PATH,
+    path.join(process.cwd(), "ethiopian_food_nutrition_300.csv"),
+    path.join(__dirname, "../../../ethiopian_food_nutrition_300.csv"),
+  ];
+
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  return DEFAULT_CSV_PATH;
+}
+
+function loadFoodCsv(csvPath) {
+  const resolved = resolveCsvPath(csvPath);
+  const raw = fs.readFileSync(resolved, "utf8");
   const lines = raw.split(/\r?\n/).filter((line) => line.trim());
   const headers = parseCsvLine(lines[0]);
 

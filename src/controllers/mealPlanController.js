@@ -204,7 +204,46 @@ async function regenerateMealPlan(req, res) {
       excludedFoods: result.excludedFoods,
     });
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error?.message || String(error),
+    });
+  }
+}
+
+/** Regenerate by calendar date (same as delete + generate for that day). */
+async function regenerateMealPlanByDate(req, res) {
+  const userId = req.user?.userId;
+  const { planDate } = req.body;
+  if (!userId || !planDate) {
+    return res.status(400).json({ message: "planDate is required" });
+  }
+
+  try {
+    const result = await regenerateMealPlanForUser({
+      userId,
+      planDate,
+      generatedBy: "stochastic",
+    });
+
+    if (!result.ok) {
+      return res.status(result.status).json({
+        message: result.message,
+        ...(result.totals ? { totals: result.totals, target: result.target } : {}),
+      });
+    }
+
+    return res.status(result.status).json({
+      targets: result.targets,
+      totals: result.totals,
+      mealPlan: result.mealPlan,
+      excludedFoods: result.excludedFoods,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error?.message || String(error),
+    });
   }
 }
 
@@ -214,4 +253,5 @@ module.exports = {
   getNutritionTargets,
   generateMealPlan,
   regenerateMealPlan,
+  regenerateMealPlanByDate,
 };
