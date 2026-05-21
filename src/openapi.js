@@ -56,6 +56,23 @@ const openapi = {
           password: { type: "string", format: "password" },
         },
       },
+      AuthResponse: {
+        type: "object",
+        properties: {
+          message: { type: "string" },
+          token: { type: "string", description: "JWT bearer token (7 day expiry)" },
+          user: {
+            type: "object",
+            properties: {
+              userId: { type: "integer" },
+              username: { type: "string" },
+              email: { type: "string" },
+              role: { type: "string", enum: ["user", "admin"] },
+              createdAt: { type: "string", format: "date-time" },
+            },
+          },
+        },
+      },
       FoodItem: {
         type: "object",
         properties: {
@@ -219,7 +236,14 @@ const openapi = {
           content: { "application/json": { schema: { $ref: "#/components/schemas/UserCreateRequest" } } },
         },
         responses: {
-          "201": { description: "User created" },
+          "201": {
+            description: "User created (returns JWT token)",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/AuthResponse" },
+              },
+            },
+          },
           "400": { description: "Validation error" },
           "500": { description: "Server error" },
         },
@@ -234,7 +258,14 @@ const openapi = {
           content: { "application/json": { schema: { $ref: "#/components/schemas/UserLoginRequest" } } },
         },
         responses: {
-          "200": { description: "Login successful (returns token)" },
+          "200": {
+            description: "Login successful (returns token)",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/AuthResponse" },
+              },
+            },
+          },
           "401": { description: "Invalid credentials" },
           "404": { description: "User not found" },
         },
