@@ -16,6 +16,9 @@ const { startDailyMealPlanCron } = require("./jobs/scheduleDailyMealPlans");
 
 dotenv.config();
 
+// Prevent 304 + empty body on API GET (breaks fetch clients that expect JSON)
+app.set("etag", false);
+
 function debugLog(payload) {
   fetch("http://127.0.0.1:7786/ingest/bbe5d152-e1f2-4067-8548-f0d2657bf8f5", {
     method: "POST",
@@ -51,6 +54,11 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use((_req, res, next) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate");
+  next();
+});
 
 app.get("/health", (req, res) => {
   return res.status(200).json({ status: "ok" });
@@ -90,7 +98,7 @@ app.use(
   "/meal-plans",
   rateLimit({
     windowMs: 60 * 1000,
-    max: 30,
+    max: 120,
     message: "Too many meal-plan requests. Please try again shortly.",
   }),
   mealPlanRouter

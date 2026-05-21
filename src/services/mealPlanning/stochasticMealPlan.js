@@ -72,14 +72,45 @@ function dedupeByFoodName(rows) {
   });
 }
 
-function ensureLoaded() {
-  if (foodRows && scaler) return;
-
-  foodRows = dedupeByFoodName(loadFoodCsv());
+function buildScalerFromRows(rows) {
+  foodRows = dedupeByFoodName(rows);
+  if (!foodRows.length) {
+    throw new Error("No food rows available for meal matching");
+  }
   const featureMatrix = foodRows.map((row) =>
     FEATURES.map((col) => row[col] ?? 0)
   );
   scaler = fitStandardScaler(featureMatrix);
+}
+
+function foodItemToCsvRow(food) {
+  return {
+    Food: food.foodName,
+    Category: food.category || "Mixed",
+    Protein_g: Number(food.foodProtein || 0),
+    Fat_g: Number(food.fat || 0),
+    Carbs_g: Number(food.carbs || 0),
+    Fiber_g: 2,
+    Calories_kcal: Number(food.foodCalories || 0),
+  };
+}
+
+/** Use when ethiopian_food_nutrition_300.csv is missing (e.g. on Render). */
+function ensureLoadedFromDbFoods(foods) {
+  if (foodRows && scaler) return;
+  buildScalerFromRows(foods.map(foodItemToCsvRow));
+}
+
+function ensureLoaded() {
+  if (foodRows && scaler) return;
+
+  try {
+    buildScalerFromRows(loadFoodCsv());
+  } catch (err) {
+    throw new Error(
+      `Food CSV not available (${err.message}). Seed FoodItem table or set FOOD_CSV_PATH.`
+    );
+  }
 }
 
 function resolveGoal(healthGoal, dietaryPreferences) {
@@ -183,4 +214,5 @@ module.exports = {
   generateStochasticMealPlan,
   MEAL_GROUPS,
   ensureLoaded,
+  ensureLoadedFromDbFoods,
 };

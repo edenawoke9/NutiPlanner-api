@@ -1,6 +1,6 @@
 const prisma = require("../../prisma");
 const { calculateNutritionTargets } = require("../nutritionTargetService");
-const { generateStochasticMealPlan } = require("./stochasticMealPlan");
+const { generateStochasticMealPlan, ensureLoaded, ensureLoadedFromDbFoods } = require("./stochasticMealPlan");
 const { getExcludedFoodNames, startOfDay } = require("./weeklyFoodLimit");
 
 function sumNutrition(items) {
@@ -74,6 +74,12 @@ async function generateMealPlanForUser({
     excludeFoodNames ?? (await getExcludedFoodNames(userId, planDate));
 
   const foodByName = new Map(foods.map((food) => [food.foodName, food]));
+
+  try {
+    ensureLoaded();
+  } catch {
+    ensureLoadedFromDbFoods(foods);
+  }
 
   const plan = generateStochasticMealPlan({
     targets,
