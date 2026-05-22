@@ -13,6 +13,7 @@ const adminRouter = require("./routes/adminRoute");
 const chatRouter = require("./routes/chatRoute");
 const { rateLimit } = require("./rateLimit");
 const { startDailyMealPlanCron } = require("./jobs/scheduleDailyMealPlans");
+const { ensureMigrations } = require("./db/ensureMigrations");
 
 dotenv.config();
 
@@ -175,4 +176,44 @@ function startServer(port, isFallback = false) {
   });
 }
 
-startServer(requestedPort);
+async function bootstrap() {
+  try {
+    await ensureMigrations();
+    // #region agent log
+    fetch("http://127.0.0.1:7747/ingest/2d44f485-f941-440b-956a-846c1c74f62c", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "6c9c86" },
+      body: JSON.stringify({
+        sessionId: "6c9c86",
+        hypothesisId: "B",
+        location: "src/server.js:bootstrap",
+        message: "ensureMigrations ok, starting server",
+        data: { port: requestedPort },
+        timestamp: Date.now(),
+        runId: "pre-fix",
+      }),
+    }).catch(() => {});
+    // #endregion
+    startServer(requestedPort);
+  } catch (err) {
+    // #region agent log
+    fetch("http://127.0.0.1:7747/ingest/2d44f485-f941-440b-956a-846c1c74f62c", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "6c9c86" },
+      body: JSON.stringify({
+        sessionId: "6c9c86",
+        hypothesisId: "B",
+        location: "src/server.js:bootstrap:error",
+        message: "ensureMigrations failed",
+        data: { message: err?.message?.slice(0, 300) },
+        timestamp: Date.now(),
+        runId: "pre-fix",
+      }),
+    }).catch(() => {});
+    // #endregion
+    console.error("Failed to apply database migrations:", err);
+    process.exit(1);
+  }
+}
+
+bootstrap();

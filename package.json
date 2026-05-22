@@ -12,6 +12,7 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:seed": "node prisma/seed.js",
+    "postinstall": "prisma generate",
     "prestart": "prisma generate && prisma migrate deploy",
     "cron:meal-plans": "node -e \"require('./src/jobs/dailyMealPlans').runDailyMealPlans().then(r=>{console.log(r);process.exit(r.failed?1:0)}).catch(e=>{console.error(e);process.exit(1)})\"",
     "start": "node src/server.js"

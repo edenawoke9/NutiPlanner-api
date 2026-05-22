@@ -65,7 +65,63 @@ async function generateMealPlanForUser({
     return { ok: false, status: 400, message: "Insufficient profile data for target calculation" };
   }
 
-  const foods = await prisma.foodItem.findMany();
+  // #region agent log
+  fetch("http://127.0.0.1:7747/ingest/2d44f485-f941-440b-956a-846c1c74f62c", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "6c9c86" },
+    body: JSON.stringify({
+      sessionId: "6c9c86",
+      hypothesisId: "D",
+      location: "src/services/mealPlanning/mealPlanService.js:generateMealPlanForUser",
+      message: "before foodItem.findMany",
+      data: { userId, planDate: String(planDate) },
+      timestamp: Date.now(),
+      runId: "pre-fix",
+    }),
+  }).catch(() => {});
+  // #endregion
+
+  let foods;
+  try {
+    foods = await prisma.foodItem.findMany();
+  } catch (err) {
+    // #region agent log
+    fetch("http://127.0.0.1:7747/ingest/2d44f485-f941-440b-956a-846c1c74f62c", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "6c9c86" },
+      body: JSON.stringify({
+        sessionId: "6c9c86",
+        hypothesisId: "D",
+        location: "src/services/mealPlanning/mealPlanService.js:foodItem.findMany:error",
+        message: "foodItem.findMany failed",
+        data: {
+          code: err?.code,
+          meta: err?.meta,
+          message: err?.message?.slice(0, 300),
+        },
+        timestamp: Date.now(),
+        runId: "pre-fix",
+      }),
+    }).catch(() => {});
+    // #endregion
+    throw err;
+  }
+
+  // #region agent log
+  fetch("http://127.0.0.1:7747/ingest/2d44f485-f941-440b-956a-846c1c74f62c", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "6c9c86" },
+    body: JSON.stringify({
+      sessionId: "6c9c86",
+      hypothesisId: "D",
+      location: "src/services/mealPlanning/mealPlanService.js:foodItem.findMany:ok",
+      message: "foodItem.findMany succeeded",
+      data: { count: foods.length },
+      timestamp: Date.now(),
+      runId: "pre-fix",
+    }),
+  }).catch(() => {});
+  // #endregion
   if (!foods.length) {
     return { ok: false, status: 400, message: "No food data available. Run: npm run prisma:seed" };
   }
