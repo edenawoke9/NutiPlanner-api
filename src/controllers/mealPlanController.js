@@ -165,25 +165,6 @@ async function generateMealPlan(req, res) {
       excludedFoods: result.excludedFoods,
     });
   } catch (error) {
-    // #region agent log
-    fetch("http://127.0.0.1:7747/ingest/2d44f485-f941-440b-956a-846c1c74f62c", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "6c9c86" },
-      body: JSON.stringify({
-        sessionId: "6c9c86",
-        hypothesisId: "D",
-        location: "src/controllers/mealPlanController.js:generateMealPlan:catch",
-        message: "generateMealPlan error",
-        data: {
-          code: error?.code,
-          meta: error?.meta,
-          message: error?.message?.slice(0, 300),
-        },
-        timestamp: Date.now(),
-        runId: "pre-fix",
-      }),
-    }).catch(() => {});
-    // #endregion
     return res.status(500).json({ message: "Internal server error", error: error.message || error });
   }
 }

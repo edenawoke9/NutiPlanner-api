@@ -2,36 +2,7 @@ const { execSync } = require("child_process");
 const path = require("path");
 const prisma = require("../prisma");
 
-const DEBUG_ENDPOINT =
-  "http://127.0.0.1:7747/ingest/2d44f485-f941-440b-956a-846c1c74f62c";
-const SESSION_ID = "6c9c86";
 const PROJECT_ROOT = path.join(__dirname, "../..");
-
-function debugLog(payload) {
-  // #region agent log
-  fetch(DEBUG_ENDPOINT, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Debug-Session-Id": SESSION_ID,
-    },
-    body: JSON.stringify({
-      sessionId: SESSION_ID,
-      timestamp: Date.now(),
-      ...payload,
-    }),
-  }).catch(() => {});
-  // #endregion
-}
-
-function dbHostFromUrl() {
-  try {
-    const u = new URL(process.env.DATABASE_URL || "");
-    return u.hostname || "unknown";
-  } catch {
-    return "invalid-url";
-  }
-}
 
 function runPrismaCommand(command) {
   return execSync(command, {
@@ -100,94 +71,21 @@ async function tryRecoverFailedMigrations() {
 }
 
 async function ensureMigrations() {
-  const dbHost = dbHostFromUrl();
-
-  // #region agent log
-  debugLog({
-    hypothesisId: "F",
-    location: "src/db/ensureMigrations.js:ensureMigrations:entry",
-    message: "ensureMigrations started",
-    data: { dbHost, nodeEnv: process.env.NODE_ENV || null },
-    runId: "post-fix",
-  });
-  // #endregion
-
   let hadCategoryBefore = false;
   try {
     hadCategoryBefore = await checkCategoryColumn();
-    // #region agent log
-    debugLog({
-      hypothesisId: "A",
-      location: "src/db/ensureMigrations.js:checkCategoryColumn:before",
-      message: "category column check before patch",
-      data: { hadCategoryBefore, dbHost },
-      runId: "post-fix",
-    });
-    // #endregion
-  } catch (err) {
-    // #region agent log
-    debugLog({
-      hypothesisId: "A",
-      location: "src/db/ensureMigrations.js:checkCategoryColumn:error",
-      message: "category column check failed",
-      data: { message: err?.message?.slice(0, 200) },
-      runId: "post-fix",
-    });
-    // #endregion
+  } catch {
+    // Non-fatal; patch below may still succeed.
   }
 
   if (!hadCategoryBefore) {
-    try {
-      await ensureCategoryColumn();
-      // #region agent log
-      debugLog({
-        hypothesisId: "A",
-        location: "src/db/ensureMigrations.js:ensureCategoryColumn",
-        message: "applied raw SQL category column patch",
-        data: { dbHost },
-        runId: "post-fix",
-      });
-      // #endregion
-    } catch (err) {
-      // #region agent log
-      debugLog({
-        hypothesisId: "A",
-        location: "src/db/ensureMigrations.js:ensureCategoryColumn:error",
-        message: "raw SQL category patch failed",
-        data: { message: err?.message?.slice(0, 200) },
-        runId: "post-fix",
-      });
-      // #endregion
-      throw err;
-    }
+    await ensureCategoryColumn();
   }
 
   const deployResult = tryMigrateDeploy();
-  // #region agent log
-  debugLog({
-    hypothesisId: "B",
-    location: "src/db/ensureMigrations.js:migrateDeploy",
-    message: deployResult.ok ? "migrate deploy ok" : "migrate deploy failed",
-    data: {
-      ok: deployResult.ok,
-      stderr: deployResult.stderr?.slice(0, 300),
-      stdout: deployResult.stdout?.slice(0, 200),
-    },
-    runId: "post-fix",
-  });
-  // #endregion
 
   if (!deployResult.ok && deployResult.stderr?.includes("P3009")) {
     const recovery = await tryRecoverFailedMigrations();
-    // #region agent log
-    debugLog({
-      hypothesisId: "F",
-      location: "src/db/ensureMigrations.js:p3009Recovery",
-      message: "attempted P3009 migration recovery",
-      data: recovery,
-      runId: "post-fix",
-    });
-    // #endregion
     if (!recovery.recovered) {
       console.warn(
         "[ensureMigrations] Prisma migrate deploy blocked (P3009); category column patched via SQL. Manual resolve may be needed."
@@ -201,16 +99,6 @@ async function ensureMigrations() {
   }
 
   const hasCategoryAfter = await checkCategoryColumn();
-  // #region agent log
-  debugLog({
-    hypothesisId: "A",
-    location: "src/db/ensureMigrations.js:checkCategoryColumn:after",
-    message: "category column check after patch",
-    data: { hadCategoryBefore, hasCategoryAfter, dbHost },
-    runId: "post-fix",
-  });
-  // #endregion
-
   if (!hasCategoryAfter) {
     throw new Error("FoodItem.category column missing after schema patch");
   }

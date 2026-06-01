@@ -653,6 +653,41 @@ const openapi = {
         responses: { "200": { description: "Summary with calories and trends" } },
       },
     },
+    "/hydration": {
+      get: {
+        tags: ["Hydration"],
+        summary: "Get hydration for a date or date range",
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          { in: "query", name: "date", schema: { type: "string", format: "date" } },
+          { in: "query", name: "from", schema: { type: "string", format: "date" } },
+          { in: "query", name: "to", schema: { type: "string", format: "date" } },
+        ],
+        responses: { "200": { description: "Hydration liters" } },
+      },
+      put: {
+        tags: ["Hydration"],
+        summary: "Set or increment daily hydration",
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                required: ["logDate"],
+                properties: {
+                  logDate: { type: "string", format: "date" },
+                  liters: { type: "number" },
+                  addLiters: { type: "number", description: "Increment (e.g. 0.25 for 250ml)" },
+                },
+              },
+            },
+          },
+        },
+        responses: { "200": { description: "Hydration upserted" } },
+      },
+    },
     "/feedback/me": {
       get: {
         tags: ["Feedback"],
