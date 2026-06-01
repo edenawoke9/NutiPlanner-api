@@ -82,12 +82,24 @@ async function createMealLog(req, res) {
 
 async function getMealLogs(req, res) {
   const userId = req.user?.userId;
-  const { date } = req.query;
+  const { date, from, to } = req.query;
   if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
   try {
     const where = { userId };
-    if (date) {
+    if (from || to) {
+      where.logDate = {};
+      if (from) {
+        const start = new Date(from);
+        start.setHours(0, 0, 0, 0);
+        where.logDate.gte = start;
+      }
+      if (to) {
+        const end = new Date(to);
+        end.setHours(23, 59, 59, 999);
+        where.logDate.lte = end;
+      }
+    } else if (date) {
       const { start, end } = getDateRange(date);
       where.logDate = { gte: start, lte: end };
     }
