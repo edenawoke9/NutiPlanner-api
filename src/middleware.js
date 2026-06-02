@@ -18,8 +18,17 @@ function authenticate(req, res, next) {
   }
 }
 
+const FOOD_MANAGER_ROLES = new Set(["admin", "nutritionist"]);
+
 function requireAdmin(req, res, next) {
   if (req.user.role !== "admin") {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+  next();
+}
+
+function requireFoodManager(req, res, next) {
+  if (!FOOD_MANAGER_ROLES.has(req.user.role)) {
     return res.status(403).json({ error: "Forbidden" });
   }
   next();
@@ -38,4 +47,4 @@ function requireSelfOrAdmin(req, res, next) {
   return res.status(403).json({ error: "Forbidden" });
 }
 
-module.exports = { authenticate, requireAdmin, requireSelfOrAdmin };
+module.exports = { authenticate, requireAdmin, requireFoodManager, requireSelfOrAdmin };

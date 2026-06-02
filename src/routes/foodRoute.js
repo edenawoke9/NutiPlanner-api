@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { authenticate, requireAdmin } = require("../middleware");
+const { authenticate, requireFoodManager } = require("../middleware");
 const {
   getFoodItems,
   getFoodItemById,
@@ -13,8 +13,8 @@ const foodRouter = Router();
 foodRouter.get("/", authenticate, getFoodItems);
 foodRouter.get("/:id", authenticate, getFoodItemById);
 
-foodRouter.post("/", authenticate, requireAdmin, createFoodItem);
-foodRouter.put("/:id", authenticate, requireAdmin, updateFoodItem);
-foodRouter.delete("/:id", authenticate, requireAdmin, deleteFoodItem);
+foodRouter.post("/", authenticate, requireFoodManager, createFoodItem);
+foodRouter.put("/:id", authenticate, requireFoodManager, updateFoodItem);
+foodRouter.delete("/:id", authenticate, requireFoodManager, deleteFoodItem);
 
 module.exports = foodRouter;

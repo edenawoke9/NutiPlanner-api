@@ -45,7 +45,7 @@ const openapi = {
           username: { type: "string" },
           email: { type: "string", format: "email" },
           password: { type: "string", format: "password" },
-          role: { type: "string", enum: ["user", "admin"] },
+          role: { type: "string", enum: ["user", "admin", "nutritionist"] },
         },
       },
       UserLoginRequest: {
@@ -67,7 +67,7 @@ const openapi = {
               userId: { type: "integer" },
               username: { type: "string" },
               email: { type: "string" },
-              role: { type: "string", enum: ["user", "admin"] },
+              role: { type: "string", enum: ["user", "admin", "nutritionist"] },
               createdAt: { type: "string", format: "date-time" },
             },
           },
@@ -332,7 +332,7 @@ const openapi = {
                 properties: {
                   username: { type: "string" },
                   email: { type: "string", format: "email" },
-                  role: { type: "string", enum: ["user", "admin"] },
+                  role: { type: "string", enum: ["user", "admin", "nutritionist"] },
                   password: { type: "string" },
                 },
               },
@@ -742,7 +742,7 @@ const openapi = {
                 properties: {
                   username: { type: "string" },
                   email: { type: "string", format: "email" },
-                  role: { type: "string", enum: ["user", "admin"] },
+                  role: { type: "string", enum: ["user", "admin", "nutritionist"] },
                 },
               },
             },

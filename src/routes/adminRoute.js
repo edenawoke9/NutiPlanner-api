@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { authenticate, requireAdmin } = require("../middleware");
+const { authenticate, requireAdmin, requireFoodManager } = require("../middleware");
 const {
   listUsers,
   updateUserAsAdmin,
@@ -16,18 +16,18 @@ const {
 
 const adminRouter = Router();
 
-adminRouter.use(authenticate, requireAdmin);
+adminRouter.use(authenticate);
 
-adminRouter.get("/users", listUsers);
-adminRouter.put("/users/:userId", updateUserAsAdmin);
-adminRouter.delete("/users/:userId", deleteUserAsAdmin);
-adminRouter.get("/reports", getAdminReport);
-adminRouter.get("/feedback", getAllFeedback);
-adminRouter.delete("/feedback/:feedbackId", deleteFeedback);
+adminRouter.get("/users", requireAdmin, listUsers);
+adminRouter.put("/users/:userId", requireAdmin, updateUserAsAdmin);
+adminRouter.delete("/users/:userId", requireAdmin, deleteUserAsAdmin);
+adminRouter.get("/reports", requireAdmin, getAdminReport);
+adminRouter.get("/feedback", requireAdmin, getAllFeedback);
+adminRouter.delete("/feedback/:feedbackId", requireAdmin, deleteFeedback);
 
-adminRouter.get("/foods", getFoodItems);
-adminRouter.post("/foods", createFoodItem);
-adminRouter.put("/foods/:id", updateFoodItem);
-adminRouter.delete("/foods/:id", deleteFoodItem);
+adminRouter.get("/foods", requireFoodManager, getFoodItems);
+adminRouter.post("/foods", requireFoodManager, createFoodItem);
+adminRouter.put("/foods/:id", requireFoodManager, updateFoodItem);
+adminRouter.delete("/foods/:id", requireFoodManager, deleteFoodItem);
 
 module.exports = adminRouter;
