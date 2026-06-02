@@ -1,5 +1,20 @@
 const prisma = require("../prisma");
 
+const FOOD_TYPES = ["fruit", "vegetable", "meat", "dairy", "grain", "snack", "drink"];
+
+function validateFoodType(foodType) {
+  if (foodType === undefined || foodType === null || foodType === "") {
+    return { ok: true, value: undefined };
+  }
+  if (FOOD_TYPES.includes(foodType)) {
+    return { ok: true, value: foodType };
+  }
+  return {
+    ok: false,
+    message: `Invalid foodType. Allowed values: ${FOOD_TYPES.join(", ")}`,
+  };
+}
+
 async function getFoodItems(req, res) {
   const { query, foodType } = req.query;
 
@@ -53,6 +68,11 @@ async function createFoodItem(req, res) {
     return res.status(400).json({ message: "foodName and foodCalories are required" });
   }
 
+  const foodTypeCheck = validateFoodType(foodType);
+  if (!foodTypeCheck.ok) {
+    return res.status(400).json({ message: foodTypeCheck.message });
+  }
+
   try {
     const foodItem = await prisma.foodItem.create({
       data: {
@@ -62,7 +82,7 @@ async function createFoodItem(req, res) {
         carbs: carbs !== undefined ? Number(carbs) : 0,
         fat: fat !== undefined ? Number(fat) : 0,
         ...(category !== undefined && { category }),
-        foodType,
+        ...(foodTypeCheck.value !== undefined && { foodType: foodTypeCheck.value }),
       },
     });
 
@@ -80,6 +100,11 @@ async function updateFoodItem(req, res) {
   }
 
   const { foodName, foodCalories, foodProtein, carbs, fat, category, foodType } = req.body;
+
+  const foodTypeCheck = validateFoodType(foodType);
+  if (!foodTypeCheck.ok) {
+    return res.status(400).json({ message: foodTypeCheck.message });
+  }
 
   try {
     const existing = await prisma.foodItem.findUnique({
@@ -99,7 +124,7 @@ async function updateFoodItem(req, res) {
         ...(carbs !== undefined && { carbs: Number(carbs) }),
         ...(fat !== undefined && { fat: Number(fat) }),
         ...(category !== undefined && { category }),
-        ...(foodType !== undefined && { foodType }),
+        ...(foodTypeCheck.value !== undefined && { foodType: foodTypeCheck.value }),
       },
     });
 
