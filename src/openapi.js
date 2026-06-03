@@ -719,6 +719,74 @@ const openapi = {
         responses: { "201": { description: "Feedback submitted" } },
       },
     },
+    "/admin/nutritionists": {
+      get: {
+        tags: ["Admin"],
+        summary: "List nutritionists (admin)",
+        security: [{ bearerAuth: [] }],
+        responses: { "200": { description: "Nutritionists list" } },
+      },
+      post: {
+        tags: ["Admin"],
+        summary: "Create nutritionist (admin)",
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                required: ["name", "email", "password"],
+                properties: {
+                  name: { type: "string" },
+                  email: { type: "string", format: "email" },
+                  password: { type: "string", minLength: 1 },
+                },
+              },
+            },
+          },
+        },
+        responses: { "201": { description: "Nutritionist created" } },
+      },
+    },
+    "/admin/nutritionists/{userId}": {
+      get: {
+        tags: ["Admin"],
+        summary: "Get nutritionist (admin)",
+        security: [{ bearerAuth: [] }],
+        parameters: [{ in: "path", name: "userId", required: true, schema: { type: "integer" } }],
+        responses: { "200": { description: "Nutritionist" } },
+      },
+      put: {
+        tags: ["Admin"],
+        summary: "Update nutritionist (admin)",
+        security: [{ bearerAuth: [] }],
+        parameters: [{ in: "path", name: "userId", required: true, schema: { type: "integer" } }],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  name: { type: "string" },
+                  email: { type: "string", format: "email" },
+                  password: { type: "string", minLength: 1 },
+                },
+              },
+            },
+          },
+        },
+        responses: { "200": { description: "Nutritionist updated" } },
+      },
+      delete: {
+        tags: ["Admin"],
+        summary: "Delete nutritionist (admin)",
+        security: [{ bearerAuth: [] }],
+        parameters: [{ in: "path", name: "userId", required: true, schema: { type: "integer" } }],
+        responses: { "200": { description: "Nutritionist deleted" } },
+      },
+    },
     "/admin/users": {
       get: {
         tags: ["Admin"],

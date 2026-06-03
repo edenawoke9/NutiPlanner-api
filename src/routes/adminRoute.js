@@ -13,6 +13,13 @@ const {
   deleteFoodItem,
   getFoodItems,
 } = require("../controllers/foodItemController");
+const {
+  listNutritionists,
+  getNutritionistById,
+  createNutritionist,
+  updateNutritionist,
+  deleteNutritionist,
+} = require("../controllers/nutritionistController");
 
 const adminRouter = Router();
 
@@ -21,6 +28,13 @@ adminRouter.use(authenticate);
 adminRouter.get("/users", requireAdmin, listUsers);
 adminRouter.put("/users/:userId", requireAdmin, updateUserAsAdmin);
 adminRouter.delete("/users/:userId", requireAdmin, deleteUserAsAdmin);
+
+adminRouter.get("/nutritionists", requireAdmin, listNutritionists);
+adminRouter.post("/nutritionists", requireAdmin, createNutritionist);
+adminRouter.get("/nutritionists/:userId", requireAdmin, getNutritionistById);
+adminRouter.put("/nutritionists/:userId", requireAdmin, updateNutritionist);
+adminRouter.delete("/nutritionists/:userId", requireAdmin, deleteNutritionist);
+
 adminRouter.get("/reports", requireAdmin, getAdminReport);
 adminRouter.get("/feedback", requireAdmin, getAllFeedback);
 adminRouter.delete("/feedback/:feedbackId", requireAdmin, deleteFeedback);
